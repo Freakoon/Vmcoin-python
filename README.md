@@ -71,6 +71,4 @@ cd Vmcoin-python
 - GitHub: [https://github.com/Freakoon](https://github.com/Freakoon)
 - ایمیل: Freakooon@gmail.com
 
-> اگر دوست داری لینک‌ها یا اطلاعات بالا رو شخصی‌سازی کنم، فقط بگو 😎
-
 ---
