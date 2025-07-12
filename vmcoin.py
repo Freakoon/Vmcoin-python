@@ -13,6 +13,8 @@ if not os.path.exists("entities.json") and not os.path.exists("transactions.json
 
 #SecurObject
 sh = SecurHash.KeyGenerator()
+encode = SecurHash.Hash({})
+data = SecurHash.Store()
 
 #Wallet manager
 class Wallet:
@@ -25,13 +27,19 @@ class Wallet:
 	#create new user
 	def new(self,i=str,random=None):
 		if random:
+			#generate new key and token(wallet)
 			key = sh.new("VM",5)
 			wallet = sh.new("vm",26)
 			self.entity["entities"][wallet] = {"key":key,"wallet":wallet,"balance":0.0,"hashkey":{wallet:key}}
+			#save key encode in SecurHash
+			key_encode = encode.change(key)
+			data.store(f'"{key_encode}":"{key}"')
 		elif not random and i:
 			wallet = sh.new("vm",26)
 			key = i
 			self.entity["entities"][wallet] = {"key":key,"wallet":wallet,"balance":0.0,"hashkey":{wallet:key}}
+			key_encode = encode.change(key)
+			data.store(f'"{key_encode}":"{key}"')
 		with open("entities.json","w") as f:
 			json.dump(self.entity,f,indent=4)
 			return True
@@ -73,7 +81,9 @@ class BlockChain:
 					return -1
 
 BlockChain = BlockChain()
-
 v = 23.458276
 
-BlockChain.send(key="VM5rYUL",wallet="vmAYg$XldrbS@dEOkeMwTMEtjMjr",user="vmWGG$gql3hSnIitIB95X6ATdKGF",value=v)
+BlockChain.send(key="VMEviHx", wallet="vm$vuWKFJSaXgZhhFBmwpFdeoGJq",user="vmX@VcwCvpHlsxvEXUu$MoowaxbJ",value=v)
+
+W = Wallet()
+print(json.dumps(W.info(),indent=4))

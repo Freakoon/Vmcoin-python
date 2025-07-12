@@ -1,5 +1,6 @@
 import datetime
 import re
+import json
 from string import ascii_lowercase,digits,ascii_uppercase
 from random import choice,randint
 
@@ -35,7 +36,7 @@ class Store:
 		for m in s:
 			pass
 		l = file_string[m.start():file_string.rfind('"""')+3]
-		r = l.replace("\n","").replace('"',"")
+		r = l.replace("\n","")
 		result = ""
 		inside = None
 		for i in r:
@@ -104,7 +105,6 @@ class KeyGenerator:
 				result += choice(self.abc)
 			return result
 
-Data = """{
-0:0
+Data = """{0:0,"233798165326235791970867392620460237432":"VMEviHx","54415630536883040734162628912373286838":"VMpuwnE","3092565169590038264924237000465120465120":"VMmHDOO"
 
 }"""
