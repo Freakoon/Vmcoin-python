@@ -1,15 +1,32 @@
-Data = """
-{
-0:0
-
-}
-"""
-
 import datetime
+import re
 from string import ascii_lowercase,digits,ascii_uppercase
 from random import choice,randint
 
-
+class Store:
+	def __init__(self):
+		self.file = __file__
+	def store(self,data):
+		#step 1 get code string
+		file_string = None
+		with open(self.file,"r") as f:
+			file_string = f.read()
+		#step 2 get start and end data var
+		s = re.finditer(r'\bDa\w*', file_string)
+		for m in s:
+			pass
+		l = file_string[m.start():file_string.rfind('"""')+3]
+		#step 3 paste info
+		result = ""
+		for line in l.splitlines():
+			if line == "":
+				result += f"\n,{data}\n\n"
+			result += line
+		#step 4 store in the file
+		with open(self.file,"w") as f:
+			new = file_string[:m.start()] + result + file_string[file_string.rfind('"""')+3:]
+			f.write(new)
+			
 #object hash
 class Hash:
 	def __init__(self,data:dict):
@@ -64,11 +81,12 @@ class KeyGenerator:
 			for i in range(0,length):
 				result += choice(self.abc)
 			return result
-			
-aa = KeyGenerator()
 
-a = Hash({})
-b = a.change(aa.new("vm",5))
-print(b)
-c = a.change_reverse(b)
-print(c)
+aaa = Store()
+for i in range(1,10):
+	aaa.store(f"{i}:{i}")
+
+Data = """{0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8
+,9:9
+
+}"""
