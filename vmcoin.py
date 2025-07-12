@@ -1,4 +1,3 @@
-import sqlite3
 import SecurHash
 import datetime
 import os
@@ -6,6 +5,7 @@ import time
 import json
 import random as rd
 
+#create configs
 if not os.path.exists("entities.json") and not os.path.exists("transactions.json") and not os.path.exists("blockpedding.json"):
 	with open("blockpedding.json","w") as f:
 		f.write('{}')
@@ -46,6 +46,14 @@ class Wallet:
 		with open("entities.json","w") as f:
 			json.dump(self.entity,f,indent=4)
 			return True
+	def rem(self, wallet):
+		try:
+			self.entity["entities"].pop(wallet)
+			with open("entities.json","w") as f:
+				json.dump(self.entity,f,indent=4)
+				return 1
+		except KeyError:
+			return 0
 	def info(self):
 		return self.entity
 
@@ -87,17 +95,6 @@ class BlockChain:
 						json.dump(self.users,f,indent=4)
 					with open("transactions.json","w") as f:
 						json.dump(self.transactions,f,indent=4)
-					print(json.dumps(self.transactions,indent=4))
-					print(json.dumps(self.blockpedding,indent=4))
 					return 1
 				else:
 					return -1
-
-BlockChain = BlockChain()
-
-v = 1
-
-BlockChain.send(key="VMEviHx", wallet="vm$vuWKFJSaXgZhhFBmwpFdeoGJq",user="vmX@VcwCvpHlsxvEXUu$MoowaxbJ",value=v)
-
-W = Wallet()
-print(json.dumps(W.info(),indent=4))
