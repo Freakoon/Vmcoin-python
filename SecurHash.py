@@ -20,12 +20,34 @@ class Store:
 		result = ""
 		for line in l.splitlines():
 			if line == "":
-				result += f"\n,{data}\n\n"
+				result += f",{data}\n\n"
 			result += line
 		#step 4 store in the file
 		with open(self.file,"w") as f:
 			new = file_string[:m.start()] + result + file_string[file_string.rfind('"""')+3:]
 			f.write(new)
+	#restore
+	def restore(self):
+		file_string = None
+		with open(self.file,"r") as f:
+			file_string = f.read()
+		s = re.finditer(r'\bDa\w*', file_string)
+		for m in s:
+			pass
+		l = file_string[m.start():file_string.rfind('"""')+3]
+		r = l.replace("\n","").replace('"',"")
+		result = ""
+		inside = None
+		for i in r:
+			if i == "}":
+				result += i
+				break
+			if i == "{":
+				inside = True
+				result += i
+			elif inside:
+				result += i
+		return eval(result)
 			
 #object hash
 class Hash:
@@ -82,11 +104,7 @@ class KeyGenerator:
 				result += choice(self.abc)
 			return result
 
-aaa = Store()
-for i in range(1,10):
-	aaa.store(f"{i}:{i}")
-
-Data = """{0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8
-,9:9
+Data = """{
+0:0
 
 }"""
