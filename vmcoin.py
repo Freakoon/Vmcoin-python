@@ -12,8 +12,7 @@ if not os.path.exists("entities.json") and not os.path.exists("transactions.json
 		f.write('{"transactions":{}}')
 
 #SecurObject
-hashKey = {}
-sh = SecurHash.Hash(hashKey)
+sh = SecurHash.KeyGenerator()
 
 #Wallet manager
 class Wallet:
@@ -26,11 +25,11 @@ class Wallet:
 	#create new user
 	def new(self,i=str,random=None):
 		if random:
-			key = sh.hashKey("VM",5)
-			wallet = sh.hashKey("vm",26)
+			key = sh.new("VM",5)
+			wallet = sh.new("vm",26)
 			self.entity["entities"][wallet] = {"key":key,"wallet":wallet,"balance":0.0,"hashkey":{wallet:key}}
 		elif not random and i:
-			wallet = sh.hashKey("vm",26)
+			wallet = sh.new("vm",26)
 			key = i
 			self.entity["entities"][wallet] = {"key":key,"wallet":wallet,"balance":0.0,"hashkey":{wallet:key}}
 		with open("entities.json","w") as f:
@@ -63,7 +62,7 @@ class BlockChain:
 				if balance > 0 and balance - float(value) > 0:
 					self.users["entities"][wallet]["balance"] -= float(value)
 					self.users["entities"][user]["balance"] += float(value)
-					self.transactions["transactions"][len(self.transactions["transactions"])+1] = {"from":wallet,"to":user,"amount":value,"time":f"{datetime.datetime.now()}","hash":sh.hashKey("tra",5)}
+					self.transactions["transactions"][len(self.transactions["transactions"])+1] = {"from":wallet,"to":user,"amount":value,"time":f"{datetime.datetime.now()}","hash":sh.new("tra",5)}
 					with open("entities.json","w") as f:
 						json.dump(self.users,f,indent=4)
 					with open("transactions.json","w") as f:
@@ -75,6 +74,6 @@ class BlockChain:
 
 BlockChain = BlockChain()
 
-v = 234.458276
+v = 23.458276
 
 BlockChain.send(key="VM5rYUL",wallet="vmAYg$XldrbS@dEOkeMwTMEtjMjr",user="vmWGG$gql3hSnIitIB95X6ATdKGF",value=v)
