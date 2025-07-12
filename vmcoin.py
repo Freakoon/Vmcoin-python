@@ -4,8 +4,11 @@ import datetime
 import os
 import time 
 import json
+import random as rd
 
-if not os.path.exists("entities.json") and not os.path.exists("transactions.json"):
+if not os.path.exists("entities.json") and not os.path.exists("transactions.json") and not os.path.exists("blockpedding.json"):
+	with open("blockpedding.json","w") as f:
+		f.write('{}')
 	with open("entities.json","w") as f:
 		f.write('{"entities":{}}')
 	with open("transactions.json","w") as f:
@@ -53,10 +56,13 @@ class BlockChain:
 	def __init__(self):
 		self.transactions = {"transactions":{}}
 		self.users = w.info()
+		self.blockpedding = {}
 		self._restore()
 	def _restore(self):
 		with open("transactions.json","r") as f:
 			self.transactions = json.load(f)
+		with open("blockpedding.json","r") as f:
+			self.blockpedding = json.load(f)
 	#send
 	def send(self,key, wallet,user,value):
 		if value == 0:
@@ -70,18 +76,26 @@ class BlockChain:
 				if balance > 0 and balance - float(value) > 0:
 					self.users["entities"][wallet]["balance"] -= float(value)
 					self.users["entities"][user]["balance"] += float(value)
-					self.transactions["transactions"][len(self.transactions["transactions"])+1] = {"from":wallet,"to":user,"amount":value,"time":f"{datetime.datetime.now()}","hash":sh.new("tra",5)}
+					transaction = self.transactions["transactions"][len(self.transactions["transactions"])+1] = {"from":wallet,"to":user,"amount":value,"time":f"{datetime.datetime.now()}","hash":sh.new("tra",5)}
+					with open("blockpedding.json","w") as f:
+						if len(self.blockpedding) <= 5:
+							self.blockpedding[len(self.transactions["transactions"])] = transaction
+							json.dump(self.blockpedding,f,indent=4)
+						else:
+							json.dump(self.blockpedding,f,indent=4)
 					with open("entities.json","w") as f:
 						json.dump(self.users,f,indent=4)
 					with open("transactions.json","w") as f:
 						json.dump(self.transactions,f,indent=4)
 					print(json.dumps(self.transactions,indent=4))
+					print(json.dumps(self.blockpedding,indent=4))
 					return 1
 				else:
 					return -1
 
 BlockChain = BlockChain()
-v = 23.458276
+
+v = 1
 
 BlockChain.send(key="VMEviHx", wallet="vm$vuWKFJSaXgZhhFBmwpFdeoGJq",user="vmX@VcwCvpHlsxvEXUu$MoowaxbJ",value=v)
 
